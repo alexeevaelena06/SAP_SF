@@ -10,9 +10,7 @@ def test_search():
     driver = webdriver.WebDriver('chromedriver.exe')
     print(1)
     driver.get("http://google.ru/")
-    element = WebDriverWait(driver=driver, timeout=60).\
-            until(expected_conditions.
-                presence_of_element_located((By.XPATH, '//div[@aria-label="Голосовой поиск"]/../..//input')))
+    element = get_element('//div[@aria-label="Голосовой поиск"]/../..//input', driver=driver)
     element.click()
     print(2)
     element.send_keys('Selenide',Keys.ENTER)
@@ -23,6 +21,15 @@ def test_search():
         print('GOT IT!')
     else:
         pytest.fail(f'Link"{str}" not equal "https://ru.selenide.org/')
+    element = get_element('//*[@id="ow16"]/a', driver=driver)
+    element.click()
+    print(3)
+    element = get_element('//*[@id="lb"]/div/a[1]', driver=driver)
+    element.click()
+    print(4)
+    element = get_element('(//*[@id="rg_s"]/div[1]/a[2]/div[2]', driver=driver)
+    str1 = element.get_property(property)
+    print(str1)
 
 def tearDown(self):
     self.driver.close()
