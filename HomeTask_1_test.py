@@ -6,31 +6,59 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
+"""ALL_elements_locators"""
+field_search = '//div[@aria-label="Голосовой поиск"]/../..//input'
+first_result = '(//h3)[1]/..'
+text_more = '//*[@id="ow16"]/a'
+pictures = '//*[@id="lb"]/div/a[1]'
+first_picture = '//*[@id="6E5nxbsENroDNM:"]'
+first_result_after_back = '(//h3)[1]/..'
+first_picture_site = '//*[@id="rg_s"]/div[1]/a[2]/div[2]'
+
+"""TEST"""
+
 def test_search():
     driver = webdriver.WebDriver('chromedriver.exe')
-    print(1)
     driver.get("http://google.ru/")
-    element = get_element('//div[@aria-label="Голосовой поиск"]/../..//input', driver=driver)
+    element = get_element(field_search, driver)
     element.click()
-    print(2)
     element.send_keys('Selenide',Keys.ENTER)
-    element = get_element('(//h3)[1]/..', driver=driver)
-    str = element.get_attribute('href')
+    element = get_element(first_result, driver)
+    checklink = element.get_attribute('href')
 
-    if str == 'https://ru.selenide.org/':
-        print('GOT IT!')
+    if checklink == 'https://ru.selenide.org/':
+        print('Первая ссылка совпадает с "https://ru.selenide.org!"')
     else:
-        pytest.fail(f'Link"{str}" not equal "https://ru.selenide.org/')
-    element = get_element('//*[@id="ow16"]/a', driver=driver)
+        pytest.fail(f'Link"{checklink}" not equal "https://ru.selenide.org/')
+    element = get_element(text_more, driver)
     element.click()
-    print(3)
-    element = get_element('//*[@id="lb"]/div/a[1]', driver=driver)
+    element = get_element(pictures, driver)
     element.click()
-    print(4)
-    element = get_element('(//*[@id="rg_s"]/div[1]/a[2]/div[2]', driver=driver)
-    str1 = element.get_property(property)
-    print(str1)
+    element = get_element(first_picture, driver)
+    checkpicture = element.get_attribute('alt')
+    i = "Selenide" in checkpicture
+    if i:
+        print("Соотносится с Selenide")
+    else:
+        print("Не соотносится с Selenide")
+    element = get_element(first_picture_site, driver)
+    checkpicture = element.text.strip()
+    i = "selenide.org" in checkpicture
+    if i:
+        print('Соотносится с сайтом "selenide.org"')
+    else:
+        print('Не соотносится с сайтом "selenide.org"')
 
+    driver.back()
+    element = get_element(first_result_after_back, driver)
+    checkfirstlinkagain = element.get_attribute('href')
+    if checkfirstlinkagain==checklink:
+        print ('Совпадают ссылки после возврата на основную страницу')
+    else:
+        pytest.fail(f'Link"{checkfirstlinkagain}" not equal "https://ru.selenide.org/')
+
+
+"""MODULES"""
 def tearDown(self):
     self.driver.close()
 
