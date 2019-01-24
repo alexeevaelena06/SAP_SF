@@ -1,4 +1,4 @@
-import pytest
+
 from selenium.webdriver.chrome import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -37,10 +37,7 @@ def test_search():
     driver.back()
     element = get_element(first_result_after_back, driver)
     checkfirstlinkagain = element.get_attribute('href')
-    if checkfirstlinkagain==checklink:
-        print ('Совпадают ссылки после возврата на основную страницу')
-    else:
-        pytest.fail(f'Link"{checkfirstlinkagain}" not equal "https://ru.selenide.org/')
+    assert checkfirstlinkagain in checklink
 
 
 """MODULES"""
